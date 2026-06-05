@@ -1,0 +1,478 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+  color-scheme: light;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  color: #0f172a;
+  background: #eff6ff;
+  --bg: #f8fafc;
+  --bg-soft: rgba(255,255,255,0.82);
+  --surface: #ffffff;
+  --text: #0f172a;
+  --muted: #64748b;
+  --primary: #4f46e5;
+  --primary-soft: #eef2ff;
+  --border: rgba(15,23,42,0.08);
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  background: radial-gradient(circle at top left, rgba(59,130,246,0.14), transparent 20%),
+    radial-gradient(circle at 92% 12%, rgba(124,58,237,0.12), transparent 15%),
+    linear-gradient(180deg, #eef2ff 0%, #f8fafc 60%, #ffffff 100%);
+  color: var(--text);
+  font-family: var(--font-family, 'Inter', system-ui, sans-serif);
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-container {
+  width: min(95%, 1040px);
+  margin: 0 auto;
+  padding: 24px 0 48px;
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255,255,255,0.88);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+
+.app-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #312e81;
+}
+
+.brand-tag {
+  background: rgba(124,58,237,0.12);
+  color: #4f46e5;
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-size: 0.9rem;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-chip {
+  padding: 10px 16px;
+  border-radius: 9999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-weight: 600;
+}
+
+.button-primary,
+.button-secondary,
+.button-danger,
+.button-heart {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border-radius: 16px;
+  border: none;
+  padding: 0 22px;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+}
+
+.button-primary {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #ffffff;
+  box-shadow: 0 18px 40px rgba(79,70,229,0.22);
+}
+
+.button-primary:hover {
+  transform: translateY(-1px);
+}
+
+.button-secondary {
+  background: #eef2ff;
+  color: #3730a3;
+  border: 1px solid rgba(99,102,241,0.22);
+}
+
+.button-secondary:hover {
+  background: #e0e7ff;
+}
+
+.button-danger {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.button-danger:hover {
+  background: #dc2626;
+}
+
+.button-heart {
+  background: rgba(239,246,255,0.95);
+  color: #1d4ed8;
+  border: 1px solid rgba(59,130,246,0.18);
+}
+
+.button-heart:hover {
+  background: #eef4ff;
+}
+
+.page-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(2rem, 2.8vw, 2.4rem);
+  line-height: 1.05;
+  color: #111827;
+}
+
+.empty-state {
+  padding: 26px 24px;
+  border-radius: 24px;
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--border);
+  color: #475569;
+  text-align: center;
+  box-shadow: 0 20px 48px rgba(15,23,42,0.08);
+}
+
+.post-card {
+  background: rgba(255,255,255,0.95);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  box-shadow: 0 32px 80px rgba(15,23,42,0.08);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.post-card-media {
+  position: relative;
+  background: #e2e8f0;
+}
+
+.post-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Ensure images inside media containers fully cover and stay cropped */
+.post-card-media img,
+.detail-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.post-card-body {
+  padding: 22px;
+}
+
+.post-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.post-author {
+  font-weight: 700;
+  color: #4338ca;
+}
+
+.post-caption {
+  margin: 0 0 18px;
+  color: #334155;
+  line-height: 1.75;
+  font-size: 1rem;
+}
+
+.post-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.form-panel {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.form-panel-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.form-panel-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 2.6vw, 2.2rem);
+  letter-spacing: -0.03em;
+  color: #312e81;
+}
+
+.form-panel-header p {
+  margin: 0;
+  color: #475569;
+  max-width: 540px;
+}
+
+.form-card {
+  display: grid;
+  gap: 18px;
+  padding: 28px;
+  border-radius: 28px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 32px 84px rgba(15,23,42,0.08);
+}
+
+.form-label {
+  font-weight: 600;
+  color: #334155;
+}
+
+.input-field,
+.textarea-field {
+  width: 100%;
+  border: 1px solid rgba(148,163,184,0.35);
+  border-radius: 18px;
+  padding: 14px 16px;
+  background: #f8fafc;
+  color: #0f172a;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-field:focus,
+.textarea-field:focus {
+  outline: none;
+  border-color: rgba(79,70,229,0.55);
+  box-shadow: 0 0 0 4px rgba(99,102,241,0.12);
+}
+
+.textarea-field {
+  min-height: 140px;
+  resize: vertical;
+}
+
+.auth-shell {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+}
+
+.auth-card {
+  width: min(100%, 450px);
+  background: rgba(255,255,255,0.95);
+  border-radius: 32px;
+  border: 1px solid var(--border);
+  box-shadow: 0 34px 96px rgba(15,23,42,0.12);
+  padding: 38px 34px;
+}
+
+.auth-brand {
+  margin: 0 0 8px;
+  font-size: 2rem;
+  font-weight: 800;
+  color: #5b21b6;
+}
+
+.auth-tagline {
+  margin: 0 0 24px;
+  color: #475569;
+  line-height: 1.7;
+}
+
+.auth-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.alert-error {
+  padding: 14px 16px;
+  background: #fef2f2;
+  border: 1px solid rgba(239,68,68,0.18);
+  border-radius: 18px;
+  color: #b91c1c;
+}
+
+.link-help {
+  display: inline-block;
+  margin-top: 18px;
+  color: #4338ca;
+  font-weight: 600;
+}
+
+/* Remove default link underlines for buttons and helper links */
+a.button-primary,
+a.button-secondary,
+.link-help {
+  text-decoration: none;
+}
+
+/* Make gallery tiles smaller on landing and ensure they crop nicely */
+.gallery .detail-card-media {
+  min-height: 160px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.detail-card {
+  display: grid;
+  gap: 28px;
+  border-radius: 32px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,0.95);
+  box-shadow: 0 32px 80px rgba(15,23,42,0.08);
+  margin-top: 24px;
+}
+
+.detail-card-media {
+  position: relative;
+  min-height: 360px;
+  background: #e2e8f0;
+}
+
+.detail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.detail-card-body {
+  padding: 32px;
+}
+
+.detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.detail-title {
+  margin: 0;
+  font-size: clamp(1.9rem, 2.4vw, 2.3rem);
+  color: #111827;
+  line-height: 1.1;
+}
+
+.comment-section h2 {
+  margin: 0 0 16px;
+  font-size: 1.25rem;
+  color: #334155;
+}
+
+.comment-form {
+  display: grid;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.comment-list {
+  display: grid;
+  gap: 16px;
+}
+
+.comment-card {
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: #f8fafc;
+  border: 1px solid rgba(148,163,184,0.22);
+}
+
+.comment-author {
+  margin-bottom: 8px;
+  font-weight: 700;
+  color: #4338ca;
+}
+
+.muted-text {
+  color: #64748b;
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .auth-card {
+    padding: 28px 24px;
+  }
+
+  .detail-card-body,
+  .form-card {
+    padding: 24px;
+  }
+}
