@@ -2,10 +2,9 @@ import { useEffect, useState, useContext } from "react";
 import { postApi } from "../api/postApi";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import BottomNav from "./BottomNav";
 
 export default function Feed() {
-  
-
   const [posts, setPosts] = useState([]);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
@@ -29,17 +28,14 @@ export default function Feed() {
   };
 
   useEffect(() => {
-    
     fetchPosts();
   }, []);
 
   const fetchPosts = async () => {
-    
     try {
-      
       const response = await postApi.getPosts();
       console.log("Posts:", response.data);
-      
+
       setPosts(response.data);
     } catch (error) {
       console.error(error);
@@ -52,7 +48,6 @@ export default function Feed() {
         <div>
           <p className="eyebrow">Your daily inspiration</p>
           <h1 className="section-title">Feed</h1>
-          
         </div>
 
         <button
@@ -108,6 +103,7 @@ export default function Feed() {
           </article>
         ))
       )}
+      <BottomNav />
     </div>
   );
 }

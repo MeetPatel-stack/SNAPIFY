@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { postApi } from "../api/postApi";
-
+import BottomNav from '../components/BottomNav';
 export default function PostDetails() {
   const { id } = useParams();
 
@@ -93,6 +93,7 @@ export default function PostDetails() {
           </section>
         </div>
       </article>
+      <BottomNav />
     </div>
   );
 }
