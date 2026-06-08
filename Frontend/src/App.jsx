@@ -13,7 +13,7 @@ import LandingPage from "./pages/LandingPage";
 import PostDetails from "./pages/PostDetails";
 import Feed from "./components/Feed";
 import CreatePost from "./components/createPost";
-
+import Profile from "./pages/Profile";
 import BottomNav from "./components/BottomNav";
 
 function AppShell() {
@@ -65,7 +65,10 @@ function AppShell() {
             path="/post/:id"
             element={user ? <PostDetails /> : <Navigate to="/login" />}
           />
-
+          <Route
+            path="/profile/:id"
+            element={user ? <Profile /> : <Navigate to="/login" />}
+          />
 
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
