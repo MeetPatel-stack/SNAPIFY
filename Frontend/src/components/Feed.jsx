@@ -2,7 +2,6 @@ import { useEffect, useState, useContext } from "react";
 import { postApi } from "../api/postApi";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import BottomNav from "./BottomNav";
 
 export default function Feed() {
   const [posts, setPosts] = useState([]);
@@ -103,7 +102,6 @@ export default function Feed() {
           </article>
         ))
       )}
-      <BottomNav />
     </div>
   );
 }
