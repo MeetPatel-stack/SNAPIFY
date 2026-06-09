@@ -15,13 +15,14 @@ import Feed from "./components/Feed";
 import CreatePost from "./components/createPost";
 import Profile from "./pages/Profile";
 import BottomNav from "./components/BottomNav";
+import EditProfile from "./pages/EditProfile";
+import Search from "./pages/Search";
 
 function AppShell() {
   const { user, logout } = useContext(AuthContext);
   const location = useLocation();
-  const showFooterNav =
-    user &&
-    (location.pathname === "/feed" || location.pathname.startsWith("/profile"));
+  // 1
+  const showFooterNav = user;
 
   return (
     <div className="app-shell">
@@ -42,7 +43,7 @@ function AppShell() {
         </header>
       )}
 
-      <main className="app-container pb-28">
+      <main className="app-container pb-28 page-with-footer">
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route
@@ -68,6 +69,15 @@ function AppShell() {
           <Route
             path="/profile/:id"
             element={user ? <Profile /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/edit-profile"
+            element={user ? <EditProfile /> : <Navigate to="/login" />}
+          />
+          <Route
+            path="/search"
+            element={user ? <Search /> : <Navigate to="/login" />}
           />
 
           <Route path="*" element={<Navigate to="/" />} />

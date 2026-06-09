@@ -2,19 +2,22 @@ import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { postApi } from "../api/postApi";
+import { userApi } from "../api/userApi";
 
 export default function Profile() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const { user } = useContext(AuthContext);
-
   const [posts, setPosts] = useState([]);
-  const [openMenu, setOpenMenu] = useState(null);
+  const [profile, setProfile] = useState(null);
+  
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     fetchPosts();
-  }, []);
+    fetchProfile();
+  }, [id]);
 
   const fetchPosts = async () => {
     try {
@@ -25,114 +28,108 @@ export default function Profile() {
       console.error(error);
     }
   };
+  const fetchProfile = async () => {
+    try {
+      const response = await userApi.getProfile(id);
 
-  // temporary handler
-  const handleEdit = (post) => {
-    console.log("Edit:", post);
+      setProfile(response.data);
+      setIsFollowing(response.data.followers?.includes(user._id));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleFollow = async () => {
+    try {
+      await userApi.toggleFollow(profile._id);
+
+      fetchProfile();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const handleDelete = (postId) => {
-    console.log("Delete:", postId);
-  };
+  if (!profile) {
+    return (
+      <div className="app-container">
+        <div className="empty-state">Loading profile...</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="max-w-md mx-auto pb-20">
-      {/* PROFILE HEADER */}
-      <div className="bg-white border-b p-4">
-        <div className="flex items-center gap-4">
+    <div className="app-container">
+      <div className="profile-header-card">
+        <div className="profile-header">
           <img
-            src="https://via.placeholder.com/100"
+            src={
+              profile.profilePic ||
+              `https://ui-avatars.com/api/?name=${profile.username}`
+            }
             alt="Profile"
-            className="w-24 h-24 rounded-full object-cover border"
+            className="profile-avatar"
           />
 
-          <div>
-            <h2 className="text-2xl font-bold">@{user.username}</h2>
+          <div className="profile-info">
+            <h2 className="profile-username">@{profile.username}</h2>
 
-            <p className="text-gray-600">{user.email}</p>
+            <div className="profile-stats">
+              <div className="profile-stat">
+                <strong>{posts.length}</strong>
+                <span>Posts</span>
+              </div>
 
-            <div className="flex gap-4 mt-2 text-sm">
-              <span>
-                <strong>{posts.length}</strong> Posts
-              </span>
+              <div className="profile-stat">
+                <strong>{profile.followers?.length || 0}</strong>
+                <span>Followers</span>
+              </div>
 
-              <span>
-                <strong>0</strong> Followers
-              </span>
-
-              <span>
-                <strong>0</strong> Following
-              </span>
+              <div className="profile-stat">
+                <strong>{profile.following?.length || 0}</strong>
+                <span>Following</span>
+              </div>
             </div>
+
+            <p className="profile-email">{profile.email}</p>
+            {profile.bio && <p className="profile-bio">{profile.bio}</p>}
           </div>
         </div>
       </div>
-
-      {/* POSTS */}
-      <div className="p-3">
-        {posts.map((post) => (
-          <div
-            key={post._id}
-            className="bg-white border rounded-lg mb-6 overflow-hidden"
-          >
-            {/* USERNAME */}
-            <div className="p-3 font-semibold border-b">
-              @{post.user.username}
-            </div>
-
-            {/* CAPTION */}
-            <div className="p-3">{post.caption}</div>
-
-            {/* IMAGE */}
-            <img
-              src={post.image}
-              alt={post.caption}
-              className="w-full cursor-pointer"
-              onClick={() => navigate(`/post/${post._id}`)}
-            />
-
-            {/* FOOTER */}
-            <div className="relative p-3 flex justify-between items-center">
-              <div className="flex gap-4">
-                <span>❤️ {post.likes.length}</span>
-
-                <span>💬 {post.comments.length}</span>
-              </div>
-
-              {/* THREE DOT BUTTON */}
-              <button
-                onClick={() =>
-                  setOpenMenu(openMenu === post._id ? null : post._id)
-                }
-                className="text-xl"
-              >
-                ⋮
-              </button>
-
-              {/* DROPDOWN */}
-              {openMenu === post._id && (
-                <div className="absolute right-3 top-10 bg-white border rounded shadow-md z-10">
-                  <button
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left"
-                    onClick={() => handleEdit(post)}
-                  >
-                    Edit
-                  </button>
-
-                  <button
-                    className="block px-4 py-2 hover:bg-gray-100 w-full text-left text-red-500"
-                    onClick={() => handleDelete(post._id)}
-                  >
-                    Delete
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        ))}
+      {user._id === profile._id && (
+        <button
+          className="button-secondary profile-edit-btn"
+          onClick={() => navigate("/edit-profile")}
+        >
+          Edit Profile
+        </button>
+      )}
+      {user._id !== profile._id && (
+        <button className="button-primary" onClick={() => handleFollow()}>
+          {isFollowing ? "Following" : "Follow"}
+        </button>
+      )}
+      <div className="profile-divider">
+        <span>POSTS</span>
       </div>
 
-     
+      {posts.length === 0 ? (
+        <div className="empty-state">No posts yet.</div>
+      ) : (
+        <div className="profile-grid">
+          {posts.map((post) => (
+            <div
+              key={post._id}
+              className="profile-grid-item"
+              onClick={() => navigate(`/post/${post._id}`)}
+            >
+              <img
+                src={post.image}
+                alt={post.caption}
+                className="profile-grid-image"
+              />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

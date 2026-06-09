@@ -22,6 +22,15 @@ export default function BottomNav() {
             <span className="bottom-nav-icon">🏠</span>
             Home
           </Link>
+          <Link
+            to="/search"
+            className={`bottom-nav-link ${
+              location.pathname === "/search" ? "active" : ""
+            }`}
+          >
+            <span className="bottom-nav-icon">🔍</span>
+            Search
+          </Link>
 
           <Link
             to={`/profile/${user._id}`}

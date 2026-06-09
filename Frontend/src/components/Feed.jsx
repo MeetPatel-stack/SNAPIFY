@@ -77,7 +77,12 @@ export default function Feed() {
 
             <div className="post-card-body">
               <div className="post-card-header">
-                <span className="post-author">@{post.user.username}</span>
+                <span
+                  className="post-author"
+                  onClick={() => navigate(`/profile/${post.user._id}`)}
+                >
+                  @{post.user.username}
+                </span>
               </div>
               <p className="post-caption"># {post.caption}</p>
               <div className="post-actions">
