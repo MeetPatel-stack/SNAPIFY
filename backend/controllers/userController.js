@@ -1,5 +1,5 @@
 const User = require("../models/User");
-
+const Post = require("../models/Post"); // for saved posts
 // Get User Profile
 
 const getUserProfile = async (req, res) => {
@@ -121,9 +121,59 @@ const searchUsers = async (req, res) => {
   }
 };
 
+const getFollowers = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate("followers", "username email profilePic");
+
+    res.json(user.followers);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+const getFollowing = async (req, res) => {
+  try {
+    const user = await User.findById(req.params.id)
+      .populate("following", "username email profilePic");
+
+    res.json(user.following);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+
+
+const getSavedPosts = async (req, res) => {
+  try {
+    const user = await User.findById(req.user._id)
+      .populate({
+        path: "savedPosts",
+        populate: {
+          path: "user",
+          select: "username profilePic",
+        },
+      });
+
+    res.json(user.savedPosts);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   getUserProfile,
   updateProfile,
   toggleFollowUser,
   searchUsers,
+  getFollowers,
+  getFollowing,
+  getSavedPosts,
 };

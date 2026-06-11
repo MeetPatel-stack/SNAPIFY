@@ -8,7 +8,8 @@ const {
   toggleLikePost,
   getPostById,
   addComment,
-  getMyPosts
+  getMyPosts,
+  toggleSavePost
 } = require("../controllers/postController.js");
 
 const { protect } = require("../middleware/authMiddleware.js");
@@ -22,7 +23,7 @@ router.get("/", protect, getPosts);
 //delete
 
 router.get("/user/:id", protect, getMyPosts);
-
+router.put("/:id/save", protect, toggleSavePost);
 router.delete("/:id", protect, deletePost);
 
 router.put("/:id/like", protect, toggleLikePost);

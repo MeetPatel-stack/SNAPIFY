@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 // Create Post
 const createPost = async (req, res) => {
@@ -111,6 +112,35 @@ const toggleLikePost = async (req, res) => {
   }
 };
 
+const toggleSavePost = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+
+    const postId = req.params.id;
+
+    const isSaved = user.savedPosts.includes(postId);
+
+    if (isSaved) {
+      user.savedPosts = user.savedPosts.filter(
+        (id) => id.toString() !== postId
+      );
+    } else {
+      user.savedPosts.push(postId);
+    }
+
+    await user.save();
+
+    res.status(200).json({
+      success: true,
+      savedPosts: user.savedPosts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 
 const getPostById = async (req, res) => {
   try {
@@ -191,5 +221,6 @@ module.exports = {
   toggleLikePost,
   getPostById,
   addComment,
-  getMyPosts
+  getMyPosts,
+  toggleSavePost
 };

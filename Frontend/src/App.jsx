@@ -17,6 +17,7 @@ import Profile from "./pages/Profile";
 import BottomNav from "./components/BottomNav";
 import EditProfile from "./pages/EditProfile";
 import Search from "./pages/Search";
+import FollowList from "./pages/FollowList";
 
 function AppShell() {
   const { user, logout } = useContext(AuthContext);
@@ -78,6 +79,11 @@ function AppShell() {
           <Route
             path="/search"
             element={user ? <Search /> : <Navigate to="/login" />}
+          />
+
+          <Route
+            path="/profile/:id/:type"
+            element={user ? <FollowList /> : <Navigate to="/login" />}
           />
 
           <Route path="*" element={<Navigate to="/" />} />

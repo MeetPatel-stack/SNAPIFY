@@ -751,3 +751,103 @@ a.button-secondary,
 .page-with-footer {
   padding-bottom: 90px;
 }
+
+.clickable-stat {
+  cursor: pointer;
+}
+
+.clickable-stat:hover {
+  opacity: 0.8;
+}
+
+.feed-post-header {
+  padding: 16px 20px;
+}
+
+.feed-user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+}
+
+.feed-user-avatar {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.feed-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px 8px;
+}
+
+.feed-left-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.action-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.active-like {
+  transform: scale(1.08);
+}
+
+.active-save {
+  transform: scale(1.08);
+}
+
+.feed-stats {
+  display: flex;
+  gap: 18px;
+  padding: 0 20px;
+  font-weight: 600;
+  color: #334155;
+}
+
+.feed-caption {
+  padding: 14px 20px 20px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.profile-tabs {
+  display: flex;
+  justify-content: center;
+  margin: 24px 0;
+  border-top: 1px solid var(--border);
+}
+
+.profile-tab {
+  flex: 1;
+  padding: 14px;
+  background: transparent;
+  border: none;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.active-profile-tab {
+  color: var(--primary);
+  border-top: 2px solid var(--primary);
+}
+
+.liked-heart {
+  color: #ef4444;
+}
+
+.saved-bookmark {
+  color: #4f46e5;
+}
+
+.action-btn svg {
+  font-size: 1.5rem;
+}

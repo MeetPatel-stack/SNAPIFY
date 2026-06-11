@@ -11,12 +11,17 @@ export default function Profile() {
   const { user } = useContext(AuthContext);
   const [posts, setPosts] = useState([]);
   const [profile, setProfile] = useState(null);
-  
+  const [activeTab, setActiveTab] = useState("posts");
+  const [savedPosts, setSavedPosts] = useState([]);
+
   const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     fetchPosts();
     fetchProfile();
+    if (user._id === id) {
+      fetchSavedPosts();
+    }
   }, [id]);
 
   const fetchPosts = async () => {
@@ -24,6 +29,15 @@ export default function Profile() {
       const response = await postApi.getUserPosts(id);
 
       setPosts(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const fetchSavedPosts = async () => {
+    try {
+      const response = await userApi.getSavedPosts();
+
+      setSavedPosts(response.data);
     } catch (error) {
       console.error(error);
     }
@@ -78,13 +92,21 @@ export default function Profile() {
                 <span>Posts</span>
               </div>
 
-              <div className="profile-stat">
+              <div
+                className="profile-stat clickable-stat"
+                onClick={() => navigate(`/profile/${profile._id}/followers`)}
+              >
                 <strong>{profile.followers?.length || 0}</strong>
+
                 <span>Followers</span>
               </div>
 
-              <div className="profile-stat">
+              <div
+                className="profile-stat clickable-stat"
+                onClick={() => navigate(`/profile/${profile._id}/following`)}
+              >
                 <strong>{profile.following?.length || 0}</strong>
+
                 <span>Following</span>
               </div>
             </div>
@@ -107,15 +129,52 @@ export default function Profile() {
           {isFollowing ? "Following" : "Follow"}
         </button>
       )}
-      <div className="profile-divider">
-        <span>POSTS</span>
-      </div>
+      <div className="profile-tabs">
+        <button
+          className={`profile-tab ${
+            activeTab === "posts" ? "active-profile-tab" : ""
+          }`}
+          onClick={() => setActiveTab("posts")}
+        >
+          Posts
+        </button>
 
-      {posts.length === 0 ? (
-        <div className="empty-state">No posts yet.</div>
+        {user._id === profile._id && (
+          <button
+            className={`profile-tab ${
+              activeTab === "saved" ? "active-profile-tab" : ""
+            }`}
+            onClick={() => setActiveTab("saved")}
+          >
+            Saved
+          </button>
+        )}
+      </div>
+      {activeTab === "posts" ? (
+        posts.length === 0 ? (
+          <div className="empty-state">No posts yet.</div>
+        ) : (
+          <div className="profile-grid">
+            {posts.map((post) => (
+              <div
+                key={post._id}
+                className="profile-grid-item"
+                onClick={() => navigate(`/post/${post._id}`)}
+              >
+                <img
+                  src={post.image}
+                  alt={post.caption}
+                  className="profile-grid-image"
+                />
+              </div>
+            ))}
+          </div>
+        )
+      ) : savedPosts.length === 0 ? (
+        <div className="empty-state">No saved posts yet.</div>
       ) : (
         <div className="profile-grid">
-          {posts.map((post) => (
+          {savedPosts.map((post) => (
             <div
               key={post._id}
               className="profile-grid-item"

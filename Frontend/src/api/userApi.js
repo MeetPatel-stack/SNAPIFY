@@ -6,4 +6,9 @@ export const userApi = {
   updateProfile: (data) => axiosClient.put("/users/profile", data),
   toggleFollow: (id) => axiosClient.put(`/users/${id}/follow`),
   searchUsers: (keyword) => axiosClient.get(`/users/search?search=${keyword}`),
+  getFollowers: (id) => axiosClient.get(`/users/${id}/followers`),
+
+  getFollowing: (id) => axiosClient.get(`/users/${id}/following`),
+  
+  getSavedPosts: () => axiosClient.get("/users/saved-posts"),
 };

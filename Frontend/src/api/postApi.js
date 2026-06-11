@@ -8,6 +8,7 @@ export const postApi = {
   deletePost: (postId) => axiosClient.delete(`/posts/${postId}`),
 
   toggleLike: (id) => axiosClient.put(`/posts/${id}/like`),
+  toggleSave: (id) => axiosClient.put(`/posts/${id}/save`),
 
   getPostById: (id) => axiosClient.get(`/posts/${id}`),
 
