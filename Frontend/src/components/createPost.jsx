@@ -4,23 +4,25 @@ import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const [caption, setCaption] = useState("");
-  const [image, setImage] = useState(null);
+  const [media, setMedia] = useState(null);
   const navigate = useNavigate();
 
-  const uploadImageToCloudinary = async () => {
+  const uploadMediaToCloudinary = async () => {
     const formData = new FormData();
 
-    formData.append("file", image);
+    formData.append("file", media);
 
     formData.append(
       "upload_preset",
       import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET,
     );
 
+    const resourceType = media.type.startsWith("video") ? "video" : "image";
+
     const response = await fetch(
       `https://api.cloudinary.com/v1_1/${
         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
-      }/image/upload`,
+      }/${resourceType}/upload`,
       {
         method: "POST",
         body: formData,
@@ -32,22 +34,25 @@ export default function CreatePost() {
     return data.secure_url;
   };
   const handleSubmit = async (e) => {
-    if (!image) {
+    if (!media) {
       alert("Please select an image");
       return;
     }
     e.preventDefault();
 
     try {
-      const imageUrl = await uploadImageToCloudinary();
+      const mediaUrl = await uploadMediaToCloudinary();
+
+      const mediaType = media.type.startsWith("video") ? "video" : "image";
 
       await postApi.createPost({
         caption,
-        image: imageUrl,
+        media: mediaUrl,
+        mediaType,
       });
 
       setCaption("");
-      setImage(null);
+      setMedia(null);
 
       navigate("/feed");
     } catch (error) {
@@ -84,8 +89,8 @@ export default function CreatePost() {
           <input
             id="image"
             type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
+            accept="image/*,video/*"
+            onChange={(e) => setMedia(e.target.files[0])}
             className="input-field"
             required
           />

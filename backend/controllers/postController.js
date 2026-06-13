@@ -4,23 +4,25 @@ const User = require("../models/User");
 // Create Post
 const createPost = async (req, res) => {
   try {
-    const { caption, image } = req.body;
+    const { caption, media, mediaType } = req.body;
 
-    if (!caption || !image) {
+
+    if (!caption || !media) {
       return res.status(400).json({
         message: "Caption and image are required",
       });
     }
 
     const post = await Post.create({
-      user: req.user._id,
       caption,
-      image,
+      media,
+      mediaType,
+      user: req.user.id,
     });
 
     const populatedPost = await Post.findById(post._id).populate(
       "user",
-      "username email",
+      "username email profilePic",
     );
 
     res.status(201).json(populatedPost);
@@ -122,7 +124,7 @@ const toggleSavePost = async (req, res) => {
 
     if (isSaved) {
       user.savedPosts = user.savedPosts.filter(
-        (id) => id.toString() !== postId
+        (id) => id.toString() !== postId,
       );
     } else {
       user.savedPosts.push(postId);
@@ -141,22 +143,19 @@ const toggleSavePost = async (req, res) => {
   }
 };
 
-
 const getPostById = async (req, res) => {
   try {
-
     const post = await Post.findById(req.params.id)
-      .populate('user', 'username')
-      .populate('comments.user', 'username');
+      .populate("user", "username")
+      .populate("comments.user", "username");
 
     if (!post) {
       return res.status(404).json({
-        message: 'Post not found',
+        message: "Post not found",
       });
     }
 
     res.json(post);
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -166,29 +165,29 @@ const getPostById = async (req, res) => {
 
 const addComment = async (req, res) => {
   try {
-
     const { text } = req.body;
 
     const post = await Post.findById(req.params.id);
 
     if (!post) {
       return res.status(404).json({
-        message: 'Post not found',
+        message: "Post not found",
       });
     }
 
     post.comments.push({
       user: req.user._id,
-      text
+      text,
     });
 
     await post.save();
 
-    const updatedPost = await Post.findById(post._id)
-      .populate('comments.user', 'username');
+    const updatedPost = await Post.findById(post._id).populate(
+      "comments.user",
+      "username",
+    );
 
     res.status(201).json(updatedPost);
-
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -198,18 +197,16 @@ const addComment = async (req, res) => {
 
 const getMyPosts = async (req, res) => {
   try {
-
     const posts = await Post.find({
-      user: req.params.id
+      user: req.params.id,
     })
-      .populate('user', 'username email')
+      .populate("user", "username email")
       .sort({ createdAt: -1 });
 
     res.json(posts);
-
   } catch (error) {
     res.status(500).json({
-      message: error.message
+      message: error.message,
     });
   }
 };
@@ -222,5 +219,5 @@ module.exports = {
   getPostById,
   addComment,
   getMyPosts,
-  toggleSavePost
+  toggleSavePost,
 };

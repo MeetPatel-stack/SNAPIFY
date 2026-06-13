@@ -851,3 +851,15 @@ a.button-secondary,
 .action-btn svg {
   font-size: 1.5rem;
 }
+
+.profile-grid-item {
+  position: relative;
+}
+
+.video-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 18px;
+  z-index: 2;
+}

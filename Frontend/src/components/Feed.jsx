@@ -49,7 +49,6 @@ export default function Feed() {
   const fetchPosts = async () => {
     try {
       const response = await postApi.getPosts();
-      
 
       setPosts(response.data);
     } catch (error) {
@@ -112,12 +111,21 @@ export default function Feed() {
 
             {/* IMAGE */}
             <div className="post-card-media">
-              <img
-                src={post.image}
-                alt={post.caption}
-                className="post-image"
-                onClick={() => navigate(`/post/${post._id}`)}
-              />
+              {post.mediaType === "image" ? (
+                <img
+                  src={post.media}
+                  alt={post.caption}
+                  className="post-image"
+                  onClick={() => navigate(`/post/${post._id}`)}
+                />
+              ) : (
+                <video
+                  src={post.media}
+                  className="post-image"
+                  controls
+                  onClick={() => navigate(`/post/${post._id}`)}
+                />
+              )}
             </div>
 
             {/* ACTIONS */}

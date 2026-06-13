@@ -94,7 +94,11 @@ export default function PostDetails() {
     <div className="app-container">
       <article className="detail-card">
         <div className="detail-card-media">
-          <img src={post.image} alt={post.caption} className="detail-image" />
+          {post.mediaType === "image" ? (
+            <img src={post.media} alt={post.caption} className="detail-image" />
+          ) : (
+            <video src={post.media} className="detail-image" controls />
+          )}
         </div>
 
         <div className="detail-card-body">

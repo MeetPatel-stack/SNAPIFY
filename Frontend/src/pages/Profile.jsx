@@ -161,11 +161,23 @@ export default function Profile() {
                 className="profile-grid-item"
                 onClick={() => navigate(`/post/${post._id}`)}
               >
-                <img
-                  src={post.image}
-                  alt={post.caption}
-                  className="profile-grid-image"
-                />
+                {post.mediaType === "image" ? (
+                  <img
+                    src={post.media}
+                    alt={post.caption}
+                    className="profile-grid-image"
+                  />
+                ) : (
+                  <>
+                    <video
+                      src={post.media}
+                      className="profile-grid-image"
+                      muted
+                    />
+
+                    <div className="video-badge">🎥</div>
+                  </>
+                )}
               </div>
             ))}
           </div>
