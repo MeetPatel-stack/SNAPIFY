@@ -124,6 +124,8 @@ export default function Feed() {
                   className="post-image"
                   controls
                   onClick={() => navigate(`/post/${post._id}`)}
+                  autoPlay
+                  
                 />
               )}
             </div>

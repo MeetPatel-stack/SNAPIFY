@@ -1,10 +1,13 @@
 import { useState } from "react";
 import { postApi } from "../api/postApi";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function CreatePost() {
   const [caption, setCaption] = useState("");
   const [media, setMedia] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const navigate = useNavigate();
 
   const uploadMediaToCloudinary = async () => {
@@ -19,19 +22,34 @@ export default function CreatePost() {
 
     const resourceType = media.type.startsWith("video") ? "video" : "image";
 
-    const response = await fetch(
+    // const response = await fetch(
+    //   `https://api.cloudinary.com/v1_1/${
+    //     import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
+    //   }/${resourceType}/upload`,
+    //   {
+    //     method: "POST",
+    //     body: formData,
+    //   },
+    // );
+
+    // const data = await response.json();
+    const response = await axios.post(
       `https://api.cloudinary.com/v1_1/${
         import.meta.env.VITE_CLOUDINARY_CLOUD_NAME
       }/${resourceType}/upload`,
+      formData,
       {
-        method: "POST",
-        body: formData,
+        onUploadProgress: (progressEvent) => {
+          const percent = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          );
+
+          setUploadProgress(percent);
+        },
       },
     );
 
-    const data = await response.json();
-
-    return data.secure_url;
+    return response.data.secure_url;
   };
   const handleSubmit = async (e) => {
     if (!media) {
@@ -41,6 +59,8 @@ export default function CreatePost() {
     e.preventDefault();
 
     try {
+      setUploading(true);
+      setUploadProgress(0);
       const mediaUrl = await uploadMediaToCloudinary();
 
       const mediaType = media.type.startsWith("video") ? "video" : "image";
@@ -57,6 +77,9 @@ export default function CreatePost() {
       navigate("/feed");
     } catch (error) {
       console.error(error);
+    } finally {
+      setUploading(false);
+      setUploadProgress(0);
     }
   };
 
@@ -94,9 +117,25 @@ export default function CreatePost() {
             className="input-field"
             required
           />
+          {uploading && (
+            <div className="upload-progress-wrapper">
+              <div className="upload-progress-bar">
+                <div
+                  className="upload-progress-fill"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
 
-          <button type="submit" className="button-primary">
-            Post to Feed
+              <p className="upload-progress-text">
+                Uploading... {uploadProgress}%
+              </p>
+            </div>
+          )}
+          {/* <button type="submit" className="button-primary" disabled={uploading}>
+            {uploading ? `Uploading ${uploadProgress}%` : "Post to Feed"}
+          </button> */}
+          <button type="submit" className="button-primary" disabled={uploading}>
+            {uploading ? "Uploading..." : "Post to Feed"}
           </button>
         </form>
       </section>
