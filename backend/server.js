@@ -21,7 +21,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://your-vercel-domain.vercel.app"],
+    origin: ["http://localhost:5173", "https://snapify-cyan.vercel.app"],
     credentials: true,
   }),
 ); // Allows frontend to make requests to backend port
